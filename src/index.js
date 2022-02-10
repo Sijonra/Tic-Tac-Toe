@@ -4,28 +4,40 @@ import './index.css';
 
 class Square extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      squareValue: null,
-    };
-  }
-
   render() {
     return (
       <button 
-        onClick={()=>{this.setState({squareValue: 'X'})}} 
+        onClick={()=> this.props.onClick()}
         className="square"
       >
-        {this.state.squareValue}
+        {this.props.squareValue}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+    }
+  }
+
+  handleClick(i) {
+    const squares = this.state.squares.slice();
+    squares[i] = 'X';
+    this.setState({squares: squares});
+  }
+
   renderSquare(i) {
-    return <Square squareValue={i}/>;
+    return(
+      <Square 
+        squareValue={this.state.squares[i]}
+        onClick={()=> this.handleClick(i)}         
+      />
+    )
   }
 
   render() {
@@ -70,8 +82,6 @@ class Game extends React.Component {
     );
   }
 }
-
-// ========================================
 
 ReactDOM.render(
   <Game />,
